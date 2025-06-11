@@ -9,7 +9,7 @@ from bs4 import BeautifulSoup
 
 # --- 1. ChromeDriver 경로 설정 ---
 # 이 경로는 사용자님의 Mac에 있는 chromedriver 파일의 실제 절대 경로입니다.
-# 'readlink -f chromedriver' 명령어로 확인한 경로를 사용하세요.
+# 반드시 'readlink -f chromedriver' 명령어로 확인한 경로로 바꿔주세요!
 # 예시: '/Users/hyun/Desktop/muapk/chromedriver'
 driver_path = '/Users/hyun/Desktop/muapk/chromedriver' # <--- 이 부분을 사용자님의 정확한 경로로 바꿔주세요!
 
@@ -33,46 +33,61 @@ try:
         EC.presence_of_element_located((By.CSS_SELECTOR, 'input[aria-label="검색창"]'))
     )
 
-    search_query = "비오는날 코디"
+    search_query = "비오는날 코디" # 원하는 검색어로 변경 가능합니다.
     search_box.send_keys(search_query) # 검색어 입력
     search_box.send_keys(Keys.RETURN) # 엔터 키를 눌러 검색 실행
 
     print(f"'{search_query}' 검색을 실행했습니다.")
     time.sleep(5) # 검색 결과 페이지 로딩 대기
 
-    # --- 4. 검색 결과 페이지에서 상품 정보 추출 ---
-    # HTML 소스 가져오기
+    # --- 4. '스냅/코디' 탭 클릭하기 ---
+    try:
+        # 'data-mds' 속성과 텍스트 내용으로 '스냅/코디' 탭 버튼을 찾습니다.
+        snap_coordi_tab = WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable((By.XPATH, "//span[@data-mds='TabTextItem' and text()='스냅/코디']"))
+        )
+        snap_coordi_tab.click()
+        print("'스냅/코디' 탭을 클릭했습니다.")
+        time.sleep(5) # 스냅/코디 결과 로딩 대기
+
+    except Exception as e:
+        print(f"'스냅/코디' 탭을 클릭하는 중 오류 발생 또는 탭을 찾을 수 없습니다: {e}")
+        # 탭을 찾지 못해도 스크립트가 멈추지 않도록 예외 처리
+
+    # --- 5. 스냅/코디 결과 페이지에서 정보 추출 ---
+    # HTML 소스 가져오기 (탭 클릭 후 새로 로딩된 페이지 소스)
     soup = BeautifulSoup(driver.page_source, 'html.parser')
 
-    # 상품 리스트 선택자 확인 (무신사 웹사이트 구조 변경 시 이 부분 수정 필요)
-    # 현재는 '.search-list-box .li_box'가 상품 목록의 각 항목을 나타내는 것으로 가정합니다.
-    products = soup.select('.search-list-box .li_box')
+    # 스냅/코디 리스트 선택자를 찾은 클래스 이름으로 변경합니다.
+    # .gIhsno 클래스를 가진 div 태그를 찾습니다.
+    snap_items = soup.select('div.gIhsno') # <--- 이 부분이 수정되었습니다!
 
-    if not products:
-        print("상품을 찾을 수 없습니다. 선택자를 다시 확인해주세요.")
+    if not snap_items:
+        print("스냅/코디 아이템을 찾을 수 없습니다. 스냅/코디 페이지의 선택자를 다시 확인해주세요.")
     else:
-        for i, product in enumerate(products):
-            # 상품명 추출
-            product_name_element = product.select_one('.item_title a')
-            product_name = product_name_element.get_text(strip=True) if product_name_element else 'N/A'
-
-            # 가격 추출
-            price_element = product.select_one('.list_price .price')
-            price = price_element.get_text(strip=True) if price_element else 'N/A'
-
+        print("\n--- 스냅/코디 검색 결과 ---")
+        for i, item in enumerate(snap_items):
             # 이미지 URL 추출
-            image_element = product.select_one('.list_img img')
+            image_element = item.select_one('img') # 각 스냅 아이템 내의 img 태그
             image_url = image_element['src'] if image_element and 'src' in image_element.attrs else 'N/A'
 
-            print(f"--- 상품 {i+1} ---")
-            print(f"상품명: {product_name}")
-            print(f"가격: {price}")
+            # 스냅/코디 상세 페이지 링크 추출
+            # a 태그의 href 속성에서 링크를 가져옵니다.
+            link_element = item.select_one('a.gtm-click-content') # 해당 링크를 감싸는 a 태그
+            full_link = link_element['href'] if link_element and 'href' in link_element.attrs else 'N/A'
+
+            # (참고) 제목은 스냅/코디 목록 페이지에서 직접 추출하기 어렵습니다.
+            # 상세 페이지로 이동해야 얻을 수 있는 경우가 많습니다.
+            # 현재는 이미지 URL과 링크만 출력합니다.
+
+            print(f"--- 스냅/코디 {i+1} ---")
             print(f"이미지 URL: {image_url}")
+            print(f"링크: {full_link}")
             print("-" * 20)
 
 except Exception as e:
     # 예외 발생 시 오류 메시지 출력
-    print(f"오류가 발생했습니다: {e}")
+    print(f"스크립트 실행 중 오류가 발생했습니다: {e}")
 
 finally:
     # 드라이버 종료 (오류 발생 여부와 관계없이 항상 실행)
