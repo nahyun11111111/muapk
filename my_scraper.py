@@ -23,21 +23,18 @@ try:
     time.sleep(2) # 페이지 로딩 대기
 
     # 2. 검색창 찾아서 검색어 입력하기
-    # 웹페이지에서 검색창이 어떤 'ID'나 '클래스'를 가지고 있는지 개발자 도구(F12)로 확인해야 합니다.
-    # 무신사 검색창은 보통 'search_query'라는 ID를 가집니다.
-    search_input_id = 'search_query'
-    
-    # WebDriverWait를 사용해서 검색창이 화면에 나타날 때까지 최대 10초 기다립니다.
-    search_box = WebDriverWait(driver, 10).until(
-        EC.presence_of_element_located((By.ID, search_input_id))
-    )
-    
-    search_query = "비오는날 코디"
-    search_box.send_keys(search_query) # 검색어 입력
-    search_box.send_keys(Keys.RETURN) # 엔터 키를 눌러 검색 실행
+# CSS 선택자를 사용하여 검색창(input 태그)을 찾습니다.
+# 'input[aria-label="검색창"]'는 'aria-label' 속성값이 "검색창"인 input 태그를 찾습니다.
+search_box = WebDriverWait(driver, 10).until(
+    EC.presence_of_element_located((By.CSS_SELECTOR, 'input[aria-label="검색창"]'))
+)
 
-    print(f"'{search_query}' 검색을 실행했습니다.")
-    time.sleep(5) # 검색 결과 페이지 로딩 대기
+search_query = "비오는날 코디"
+search_box.send_keys(search_query) # 검색어 입력
+search_box.send_keys(Keys.RETURN) # 엔터 키를 눌러 검색 실행
+
+print(f"'{search_query}' 검색을 실행했습니다.")
+time.sleep(5) # 검색 결과 페이지 로딩 대기
 
     # 3. 검색 결과 페이지의 HTML 가져오기
     # 셀레니움으로 페이지를 이동시킨 후, 그 페이지의 HTML을 BeautifulSoup으로 넘겨 파싱합니다.
