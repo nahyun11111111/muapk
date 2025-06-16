@@ -204,7 +204,7 @@ def scrape_musinsa_coordi(search_query, num_results=10):
             print("[스크래퍼] 스냅/코디 아이템을 찾을 수 없습니다.")
         else:
             print(f"[스크래퍼] 총 {len(snap_items)}개의 스냅/코디 아이템을 찾았습니다.")
-            # 요청된 개수만큼 처리 (랜덤 선택 포함)
+            # 요청된 개수만큼 처리 
             if num_results == 1:
                 items_to_process = [random.choice(snap_items)] if snap_items else []
             else:
