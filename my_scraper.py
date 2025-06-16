@@ -7,11 +7,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from bs4 import BeautifulSoup
 
-# --- 1. ChromeDriver 경로 설정 ---
-# 이 경로는 사용자님의 Mac에 있는 chromedriver 파일의 실제 절대 경로입니다.
-# 반드시 'readlink -f chromedriver' 명령어로 확인한 경로로 바꿔주세요!
-# 예시: '/Users/hyun/Desktop/muapk/chromedriver'
-driver_path = '/Users/hyun/Desktop/muapk/chromedriver' # <--- 이 부분을 사용자님의 정확한 경로로 바꿔주세요!
+
+driver_path = '/Users/hyun/Desktop/muapk/chromedriver' 
 
 # ChromeDriver 서비스 설정
 service = Service(driver_path)
@@ -24,11 +21,9 @@ try:
 
     # --- 2. 무신사 웹사이트로 이동 ---
     driver.get('https://www.musinsa.com')
-    time.sleep(3) # 페이지 로딩 대기 (충분히 기다립니다)
+    time.sleep(3) # 페이지 로딩 대기 (
 
     # --- 3. 검색창 찾아서 검색어 입력하기 ---
-    # 개발자 도구로 확인한 검색창의 CSS 선택자를 사용합니다.
-    # 'input[aria-label="검색창"]'는 'aria-label' 속성값이 "검색창"인 input 태그를 찾습니다.
     search_box = WebDriverWait(driver, 10).until(
         EC.presence_of_element_located((By.CSS_SELECTOR, 'input[aria-label="검색창"]'))
     )
@@ -60,8 +55,7 @@ try:
 
     # 스냅/코디 리스트 선택자를 찾은 클래스 이름으로 변경합니다.
     # .gIhsno 클래스를 가진 div 태그를 찾습니다.
-    snap_items = soup.select('div.gIhsno') # <--- 이 부분이 수정되었습니다!
-
+    snap_items = soup.select('div.gIhsno') 
     if not snap_items:
         print("스냅/코디 아이템을 찾을 수 없습니다. 스냅/코디 페이지의 선택자를 다시 확인해주세요.")
     else:
@@ -91,6 +85,6 @@ except Exception as e:
 
 finally:
     # 드라이버 종료 (오류 발생 여부와 관계없이 항상 실행)
-    if 'driver' in locals(): # driver 변수가 정의되었는지 확인
+    if 'driver' in locals(): 
         driver.quit()
         print("브라우저가 닫혔습니다.")

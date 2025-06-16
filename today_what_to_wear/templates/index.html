@@ -3,115 +3,554 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>오늘 뭐 입지?</title>
+    <title>오늘 뭐 입지? ☁️</title>
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <style>
-        /* 기본적인 CSS 스타일을 추가하여 좀 더 보기 좋게 만듭니다 */
+        /* CSS 변수 (컬러 팔레트) 정의 */
+        :root {
+            /* 파스텔 핑크 컬러 팔레트 */
+            --primary-pink: #ffadad; /* 메인 파스텔 핑크 */
+            --light-pink-bg: #ffebeb; /* 아주 연한 핑크 배경 */
+            --accent-purple: #c6a7d9; /* 연한 보라색 강조 (아이콘, 특정 버튼) */
+            --accent-peach: #ffccb3; /* 피치색 강조 (결과 섹션 테두리) */
+            --dark-text: #6b4c53; /* 짙은 베리 텍스트 */
+            --light-gray-border: #e0d0d6; /* 연한 회색/핑크빛 테두리 */
+            --white-card: #ffffff; /* 카드 배경 흰색 */
+            --shadow-light: rgba(0, 0, 0, 0.04); /* 연한 그림자 */
+            --shadow-medium: rgba(0, 0, 0, 0.08); /* 중간 그림자 */
+            --button-border-color: rgba(255, 255, 255, 0.7); /* 버튼 테두리 색상 */
+        }
+
+        /* 기본 바디 스타일 */
         body {
-            font-family: Arial, sans-serif;
-            margin: 40px;
-            background-color: #f4f4f4;
-            color: #333;
-            text-align: center;
+            font-family: 'Pretendard', 'sans-serif'; /* 폰트 설정 */
+            background-color: var(--light-pink-bg); /* 배경색 설정 */
+            color: var(--dark-text); /* 기본 텍스트 색상 */
+            padding: 50px 0; /* 상하 여백 */
+            min-height: 100vh; /* 최소 높이 설정 (스크롤 없어도 꽉 차게) */
+            display: flex;
+            justify-content: center; /* 가로 중앙 정렬 */
+            align-items: flex-start; /* 세로 상단 정렬 */
         }
+        /* 메인 컨테이너 스타일 */
+        .main-wrapper {
+            background-color: var(--white-card); /* 배경색 */
+            border-radius: 25px; /* 모서리 둥글게 */
+            box-shadow: 0 15px 40px var(--shadow-medium); /* 그림자 효과 */
+            padding: 45px; /* 내부 여백 */
+            max-width: 950px; /* 최대 너비 */
+            width: 100%; /* 너비 100% (최대 너비까지) */
+            animation: fadeIn 1s ease-out; /* 페이드인 애니메이션 */
+            border: 3px solid var(--primary-pink); /* 테두리 */
+        }
+        /* 페이드인 애니메이션 정의 */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 제목 스타일 */
         h1 {
-            color: #0056b3;
-            margin-bottom: 30px;
+            color: var(--primary-pink);
+            font-weight: 800;
+            margin-bottom: 25px;
+            letter-spacing: -0.8px;
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.02);
         }
-        .container {
-            background-color: #fff;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            display: inline-block; /* 내용물 너비만큼만 영역 차지 */
+        /* 리드 텍스트 스타일 */
+        .lead {
+            font-size: 1.2rem;
+            color: var(--dark-text);
+            margin-bottom: 50px;
         }
-        form {
-            margin-top: 20px;
-            margin-bottom: 30px;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            background-color: #f9f9f9;
+
+        /* 옵션 버튼 그룹 스타일 */
+        .option-button-group {
+            display: flex;
+            flex-direction: column; /* 세로로 정렬 */
+            gap: 20px; /* 버튼 사이 간격 */
+            margin-bottom: 40px;
         }
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
+        /* 옵션 버튼 개별 스타일 */
+        .option-btn {
+            padding: 20px 30px;
+            border-radius: 15px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            background-color: var(--primary-pink);
+            color: var(--white-card);
+            border: 2px solid var(--button-border-color);
+            box-shadow: 0 5px 15px var(--shadow-medium);
+            transition: all 0.3s ease; /* 호버 애니메이션 */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
         }
-        input[type="text"] {
-            width: 80%;
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+        .option-btn:hover {
+            background-color: #ff9191; /* 핑크 호버 색상 */
+            transform: translateY(-5px); /* 위로 살짝 이동 */
+            box-shadow: 0 8px 20px var(--shadow-medium);
         }
-        button {
-            background-color: #007bff;
-            color: white;
+        .option-btn i {
+            font-size: 1.8em;
+            color: var(--white-card); /* 아이콘 색상 */
+        }
+
+        /* 입력 폼 섹션 스타일 (초기에는 숨김) */
+        .input-form-section {
+            display: none; /* JavaScript로 제어 */
+            background-color: var(--white-card);
+            border-radius: 20px;
+            box-shadow: 0 8px 20px var(--shadow-light);
+            padding: 35px;
+            margin-bottom: 40px;
+            border: 2px solid var(--light-gray-border);
+            animation: fadeIn 0.5s ease-out; /* 페이드인 애니메이션 */
+        }
+        .input-form-section h2 {
+            color: var(--dark-text);
+            font-weight: 700;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .input-form-section h2 i {
+            color: var(--white-card);
+            background-color: var(--accent-purple);
+            padding: 5px;
+            border-radius: 50%;
+            font-size: 1.6em;
+        }
+        .input-form-section .btn {
+             width: 100%; /* 버튼 너비 100% */
+             margin-top: 20px;
+        }
+
+        /* 폼 라벨 스타일 */
+        .form-label {
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--dark-text);
+        }
+        /* 폼 컨트롤 (입력 필드) 스타일 */
+        .form-control {
+            border-radius: 15px;
+            padding: 15px;
+            border: 2px solid var(--light-gray-border);
+            box-shadow: inset 0 1px 5px rgba(0,0,0,0.02);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .form-control:focus {
+            border-color: var(--primary-pink);
+            box-shadow: 0 0 0 0.25rem rgba(255, 173, 173, 0.3); /* 포커스 시 그림자 */
+        }
+
+        /* 버튼 기본 스타일 */
+        .btn {
+            padding: 15px 35px;
+            border-radius: 12px;
+            font-weight: 700;
+            letter-spacing: 0.6px;
+            transition: all 0.3s ease;
+            border: 2px solid var(--button-border-color);
+            box-shadow: 0 4px 15px var(--shadow-light);
+        }
+        /* 기본(primary) 버튼 스타일 */
+        .btn-primary {
+            background-color: var(--primary-pink);
+            color: var(--white-card);
+        }
+        .btn-primary:hover {
+            background-color: #ff9191;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px var(--shadow-medium);
+        }
+        /* 경고(warning) 버튼 스타일 (랜덤 코디 버튼용) */
+        .btn-warning {
+            background-color: var(--accent-purple); /* 연보라색으로 변경 */
+            color: var(--white-card);
+            border: 2px solid rgba(255, 255, 255, 0.7);
+        }
+        .btn-warning:hover {
+            background-color: #b391d1;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px var(--shadow-medium);
+        }
+        /* 뒤로가기 버튼 스타일 */
+        .btn-back {
+            background-color: var(--light-gray-border);
+            color: var(--dark-text);
             padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s ease;
+            border-radius: 10px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            border: 1px solid var(--light-gray-border);
         }
-        button:hover {
-            background-color: #0056b3;
+        .btn-back:hover {
+            background-color: #d1c0c7;
+            color: var(--dark-text);
         }
-        .result {
-            margin-top: 30px;
-            padding: 20px;
-            background-color: #e2f0fb;
-            border-radius: 8px;
+
+
+        /* 결과 섹션 스타일 (초기에는 숨김) */
+        .result-section {
+            display: none; /* JavaScript로 제어 */
+            background-color: var(--white-card);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 8px 20px var(--shadow-light);
+            border: 2px solid var(--accent-peach);
             text-align: left;
+            animation: fadeIn 0.5s ease-out;
         }
-        .result img {
+        .result-section h2 {
+            color: var(--dark-text);
+            font-weight: 700;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .result-section h2 i {
+            color: var(--white-card);
+            background-color: var(--accent-peach);
+            padding: 5px;
+            border-radius: 50%;
+            font-size: 1.6em;
+        }
+        /* 결과 아이템 (각 코디) 스타일 */
+        .result-item {
+            border-bottom: 1px dashed var(--light-gray-border); /* 점선 구분선 */
+            padding-bottom: 25px;
+            margin-bottom: 25px;
+        }
+        .result-item:last-child {
+            border-bottom: none; /* 마지막 아이템은 구분선 없음 */
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        .result-image {
             max-width: 100%;
             height: auto;
             display: block;
-            margin-bottom: 10px;
-            border-radius: 5px;
+            margin: 20px auto; /* 이미지 중앙 정렬 */
+            border-radius: 15px;
+            box-shadow: 0 6px 18px var(--shadow-light);
+            transition: transform 0.3s ease;
         }
-        .result p {
-            margin-bottom: 5px;
+        .result-image:hover {
+            transform: scale(1.02); /* 호버 시 약간 확대 */
+        }
+        /* 오류 메시지 스타일 */
+        .error-message {
+            color: #dc3545; /* 빨간색 텍스트 */
+            font-weight: 600;
+            margin-bottom: 30px;
+            padding: 18px;
+            background-color: #ffe6e6; /* 연한 빨간색 배경 */
+            border: 1px solid #ffb3b3;
+            border-radius: 10px;
+        }
+        /* 링크 스타일 */
+        a {
+            color: var(--primary-pink);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        a:hover {
+            text-decoration: underline;
+            color: #ff9191;
+        }
+        /* 푸터 스타일 */
+        .footer {
+            margin-top: 50px;
+            font-size: 0.95rem;
+            color: var(--dark-text);
+        }
+
+        /* 로딩 오버레이 스타일 */
+        #loadingOverlay {
+            position: fixed; /* 화면에 고정 */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6); /* 반투명 검은색 배경 */
+            z-index: 9999; /* 다른 요소 위에 표시 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            /* 초기에는 숨김 */
+            display: none;
+        }
+        #loadingOverlay .spinner-border {
+            width: 3rem;
+            height: 3rem;
+            color: var(--white-card) !important; /* 스피너 색상 흰색 */
+        }
+        #loadingOverlay p {
+            color: var(--white-card);
+            font-size: 1.2rem;
+            margin-top: 15px;
+        }
+
+        /* 반응형 디자인 */
+        @media (max-width: 992px) {
+            .main-wrapper {
+                padding: 35px;
+            }
+            h1 {
+                font-size: 2.5rem;
+            }
+            .lead {
+                font-size: 1.1rem;
+            }
+            .section-card {
+                padding: 30px;
+            }
+            .section-card h2 {
+                font-size: 1.5rem;
+            }
+            .btn {
+                padding: 12px 25px;
+                font-size: 0.95rem;
+            }
+            .result-section {
+                padding: 30px;
+            }
+        }
+        @media (max-width: 768px) {
+            .main-wrapper {
+                padding: 25px;
+                border-radius: 20px;
+            }
+            h1 {
+                font-size: 2rem;
+            }
+            .lead {
+                margin-bottom: 30px;
+            }
+            .option-btn {
+                font-size: 1.2rem;
+                padding: 15px 20px;
+            }
+            .option-btn i {
+                font-size: 1.5em;
+            }
+            .input-form-section h2 {
+                font-size: 1.3rem;
+                flex-direction: column; /* 제목과 아이콘 세로 정렬 */
+                align-items: center;
+                gap: 8px;
+                text-align: center;
+            }
+            .input-form-section h2 i {
+                font-size: 1.4em;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>오늘 뭐 입지? 👗👕</h1>
-        <p>날씨와 키워드를 기반으로 패션 코디를 추천해 드립니다.</p>
-
-        <form action="/recommend_by_weather" method="post">
-            <h2>날씨 기반 코디 추천</h2>
-            <label for="city">지역명 입력 (예: 서울):</label>
-            <input type="text" id="city" name="city" placeholder="도시 이름을 입력하세요 (예: 부산)">
-            <button type="submit">날씨 코디 추천받기</button>
-        </form>
-
-        <form action="/recommend_by_keyword" method="post">
-            <h2>키워드 기반 코디 추천</h2>
-            <label for="keyword">키워드 입력 (예: 비오는날 코디, 캐주얼, 데이트):</label>
-            <input type="text" id="keyword" name="keyword" placeholder="키워드를 입력하세요">
-            <button type="submit">키워드 코디 추천받기</button>
-        </form>
-
-        <div class="result">
-            {% if results %}
-                <h2>추천 코디 결과:</h2>
-                {% for item in results %}
-                    <p><strong>이미지 URL:</strong> <a href="{{ item.image_url }}" target="_blank">{{ item.image_url }}</a></p>
-                    <p><strong>링크:</strong> <a href="{{ item.link }}" target="_blank">{{ item.link }}</a></p>
-                    {% if item.image_url != 'N/A' %}
-                        <img src="{{ item.image_url }}" alt="코디 이미지" width="300">
-                    {% endif %}
-                    <hr>
-                {% endfor %}
-            {% elif error_message %}
-                <p style="color: red;">오류: {{ error_message }}</p>
-            {% else %}
-                <p>아직 추천 결과가 없습니다. 위에 원하는 옵션을 선택하여 코디를 추천받아 보세요!</p>
-            {% endif %}
+    <div id="loadingOverlay">
+        <div class="spinner-border text-light" role="status">
+            <span class="visually-hidden">Loading...</span>
         </div>
+        <p class="text-light mt-3">잠시만 기다려주세요...</p>
+        <p class="text-light" style="font-size: 0.9rem;">(코디를 불러오는 중입니다)</p>
     </div>
+    
+    <div class="main-wrapper text-center">
+        <h1 class="mb-4">오늘 뭐 입지? </h1>
+        <p class="lead">당신을 위한 맞춤 코디를 추천해 드립니다.</p>
+
+        {% if error_message %}
+            <div class="alert alert-danger error-message" role="alert">
+                {{ error_message }}
+            </div>
+        {% endif %}
+
+        <div id="optionButtons" class="option-button-group">
+            <button class="option-btn" data-target="weatherForm">
+                <i class="bi bi-cloud-sun-fill"></i> 날씨 기반 코디 추천
+            </button>
+            <button class="option-btn" data-target="weatherRandomForm">
+                <i class="bi bi-cloud-lightning-rain-fill"></i> 날씨 기반 랜덤 코디
+            </button>
+            <button class="option-btn" data-target="keywordForm">
+                <i class="bi bi-bookmark-heart-fill"></i> 키워드 기반 코디 추천
+            </button>
+            <button class="option-btn" data-target="keywordRandomForm">
+                <i class="bi bi-tag-fill"></i> 키워드 기반 랜덤 코디
+            </button>
+            <button class="option-btn" data-target="randomForm">
+                <i class="bi bi-question-diamond-fill"></i> 완전 랜덤 코디 추천
+            </button>
+        </div>
+
+        <div id="weatherForm" class="input-form-section">
+            <button class="btn btn-back" onclick="goBack()"><i class="bi bi-arrow-left-circle"></i> 뒤로가기</button>
+            <h2><i class="bi bi-cloud-sun-fill"></i> 날씨 기반 코디 추천</h2>
+            <form action="/weather_coordi" method="post">
+                <div class="mb-3">
+                    <label for="city" class="form-label">지역명 입력 (예: 서울):</label>
+                    <input type="text" class="form-control" id="city" name="city" placeholder="도시 이름을 입력하세요 (예: 부산)" required>
+                </div>
+                <button type="submit" class="btn btn-primary">코디 추천받기</button>
+            </form>
+        </div>
+
+        <div id="weatherRandomForm" class="input-form-section">
+            <button class="btn btn-back" onclick="goBack()"><i class="bi bi-arrow-left-circle"></i> 뒤로가기</button>
+            <h2><i class="bi bi-cloud-lightning-rain-fill"></i> 날씨 기반 랜덤 코디</h2>
+            <form action="/weather_random_coordi" method="post">
+                <div class="mb-3">
+                    <label for="city_random" class="form-label">지역명 입력 (예: 서울):</label>
+                    <input type="text" class="form-control" id="city_random" name="city" placeholder="도시 이름을 입력하세요 (예: 부산)" required>
+                </div>
+                <button type="submit" class="btn btn-warning">랜덤 코디 추천받기</button>
+            </form>
+        </div>
+
+        <div id="keywordForm" class="input-form-section">
+            <button class="btn btn-back" onclick="goBack()"><i class="bi bi-arrow-left-circle"></i> 뒤로가기</button>
+            <h2><i class="bi bi-bookmark-heart-fill"></i> 키워드 기반 코디 추천</h2>
+            <form action="/keyword_coordi" method="post">
+                <div class="mb-3">
+                    <label for="keyword" class="form-label">키워드 입력 (예: 캐주얼, 데이트룩):</label>
+                    <input type="text" class="form-control" id="keyword" name="keyword" placeholder="키워드를 입력하세요" required>
+                </div>
+                <button type="submit" class="btn btn-primary">코디 추천받기</button>
+            </form>
+        </div>
+
+        <div id="keywordRandomForm" class="input-form-section">
+            <button class="btn btn-back" onclick="goBack()"><i class="bi bi-arrow-left-circle"></i> 뒤로가기</button>
+            <h2><i class="bi bi-tag-fill"></i> 키워드 기반 랜덤 코디</h2>
+            <form action="/keyword_random_coordi" method="post">
+                <div class="mb-3">
+                    <label for="keyword_random" class="form-label">키워드 입력 (예: 캐주얼, 데이트룩):</label>
+                    <input type="text" class="form-control" id="keyword_random" name="keyword" placeholder="키워드를 입력하세요" required>
+                </div>
+                <button type="submit" class="btn btn-warning">랜덤 코디 추천받기</button>
+            </form>
+        </div>
+
+        <div id="randomForm" class="input-form-section">
+            <button class="btn btn-back" onclick="goBack()"><i class="bi bi-arrow-left-circle"></i> 뒤로가기</button>
+            <h2><i class="bi bi-question-diamond-fill"></i> 완전 랜덤 코디 추천</h2>
+            <form action="/random_coordi" method="post">
+                <p class="lead text-muted">버튼을 클릭하면 오늘의 랜덤 코디가 나타납니다!</p>
+                <button type="submit" class="btn btn-primary">오늘의 랜덤 코디!</button>
+            </form>
+        </div>
+
+        <div id="resultSection" class="result-section">
+            <button class="btn btn-back" onclick="goBack()"><i class="bi bi-arrow-left-circle"></i> 뒤로가기</button>
+            <h2><i class="bi bi-balloon-heart-fill"></i> 추천 코디 결과:</h2>
+            <div class="result-content">
+                {% if weather_info %}
+                    <div class="alert alert-info" role="alert">
+                        <strong>날씨 정보:</strong> {{ weather_info.temperature }}°C, {{ weather_info.weather_description }}<br>
+                        <strong>추천 의상:</strong> {{ weather_info.outfit_desc }}
+                    </div>
+                {% endif %}
+                {% if results %}
+                    {% for item in results %}
+                        <div class="result-item">
+                            <p class="mb-2"><strong>이미지:</strong> <a href="{{ item.image_url }}" target="_blank">클릭하여 보기</a></p>
+                            {% if item.image_url and item.image_url != 'N/A' %}
+                                <img src="{{ item.image_url }}" alt="코디 이미지" class="img-fluid result-image">
+                            {% else %}
+                                <p class="text-muted">이미지 없음</p>
+                            {% endif %}
+                            <p class="mb-0"><strong>링크:</strong> <a href="{{ item.link }}" target="_blank">{{ item.link }}</a></p>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="lead text-muted">아직 추천 결과가 없습니다. 위에 원하는 옵션을 선택하여 코디를 받아보세요!</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <footer class="footer mt-5 text-muted">
+            <p>&copy; 2025 오늘 뭐 입지? </p>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const optionButtons = document.querySelectorAll('.option-btn'); // 메인 옵션 버튼들
+            const inputFormSections = document.querySelectorAll('.input-form-section'); // 모든 입력 폼 섹션들
+            const resultSection = document.getElementById('resultSection'); // 결과 섹션
+            const mainOptionButtons = document.getElementById('optionButtons'); // 메인 옵션 버튼 그룹
+            const loadingOverlay = document.getElementById('loadingOverlay'); // 로딩 오버레이
+
+            // 페이지 로드 시, Flask에서 results나 error_message를 전달받았으면 결과 섹션 보이기
+            {% if results or error_message %}
+                mainOptionButtons.style.display = 'none'; // 초기 버튼 그룹 숨김
+                resultSection.style.display = 'block'; // 결과 섹션 보이기
+            {% else %}
+                // 초기에는 모든 입력 폼과 결과 섹션을 숨기고, 메인 옵션 버튼만 보이게 함
+                inputFormSections.forEach(section => section.style.display = 'none');
+                resultSection.style.display = 'none';
+                mainOptionButtons.style.display = 'flex';
+            {% endif %}
+
+            // 옵션 버튼 클릭 이벤트 리스너 설정
+            optionButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const targetId = this.dataset.target; 
+                    mainOptionButtons.style.display = 'none'; 
+
+                    // 모든 입력 폼 섹션을 순회하며, 클릭된 버튼에 해당하는 폼만 보이게 하고 나머지는 숨김
+                    inputFormSections.forEach(section => {
+                        if (section.id === targetId) {
+                            section.style.display = 'block';
+                            const firstInput = section.querySelector('input');
+                            if (firstInput) {
+                                firstInput.focus();
+                            }
+                        } else {
+                            section.style.display = 'none';
+                        }
+                    });
+                    resultSection.style.display = 'none'; 
+                });
+            });
+
+            window.goBack = function() {
+                inputFormSections.forEach(section => section.style.display = 'none'); 
+                resultSection.style.display = 'none'; 
+                mainOptionButtons.style.display = 'flex'; 
+                const errorMessageDiv = document.querySelector('.error-message');
+                if (errorMessageDiv) {
+                    errorMessageDiv.style.display = 'none';
+                }
+            };
+
+            const forms = document.querySelectorAll('form');
+            forms.forEach(form => {
+                form.addEventListener('submit', function() {
+                    loadingOverlay.style.display = 'flex'; // 로딩 오버레이를 flex로 변경하여 보이게 함
+                });
+            });
+
+            window.addEventListener('load', function() {
+                loadingOverlay.style.display = 'none';
+            });
+            
+            if (loadingOverlay.style.display !== 'none') {
+                loadingOverlay.style.display = 'none';
+            }
+        });
+    </script>
 </body>
 </html>
