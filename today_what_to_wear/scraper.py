@@ -167,17 +167,17 @@ def scrape_musinsa_coordi(search_query, num_results=10):
                 EC.element_to_be_clickable((By.CSS_SELECTOR, 'button[data-button-id="search_button"]'))
             )
             search_button.click()
-            # print("[스크래퍼] 모달 내부 검색 버튼을 클릭했습니다.") # 제거
+            # print(" 모달 내부 검색 버튼을 클릭했습니다.") # 제거
         except Exception as e:
-            # print(f"[스크래퍼] 모달 내부 검색 버튼을 찾거나 클릭하는 중 오류 발생: {e}") # 제거
-            # print("[스크래퍼] 엔터 키를 눌러 검색을 시도합니다.") # 제거
+            # print(f" 모달 내부 검색 버튼을 찾거나 클릭하는 중 오류 발생: {e}") # 제거
+            # print(" 엔터 키를 눌러 검색을 시도합니다.") # 제거
             modal_search_box.send_keys(Keys.RETURN)
 
-        # print(f"[스크래퍼] 검색을 실행했습니다.") # 제거
+        # print(f" 검색을 실행했습니다.") # 제거
         
         # 검색 결과 페이지로 URL이 변경될 때까지 기다립니다
         WebDriverWait(driver, 40).until(EC.url_contains('/search/goods'))
-        # print("[스크래퍼] 검색 결과 페이지로 성공적으로 이동했습니다.") # 제거
+        # print(" 검색 결과 페이지로 성공적으로 이동했습니다.") # 제거
         time.sleep(7) 
 
         # '스냅/코디' 탭 클릭
@@ -186,13 +186,13 @@ def scrape_musinsa_coordi(search_query, num_results=10):
                 EC.element_to_be_clickable((By.CSS_SELECTOR, 'button[data-button-name="스냅/코디"]'))
             )
             snap_coordi_tab.click()
-            # print("[스크래퍼] '스냅/코디' 탭을 클릭했습니다.") # 제거
+            # print(" '스냅/코디' 탭을 클릭했습니다.") # 제거
             time.sleep(7) 
 
         except Exception as e:
-            # print(f"[스크래퍼] '스냅/코디' 탭을 찾거나 클릭하는 중 오류 발생: {e}") # 제거
-            # print("[스크래퍼] '스냅/코디' 탭 클릭 없이 현재 페이지에서 코디 아이템을 찾습니다.") # 제거
-            pass # 에러 메시지 대신 아무것도 출력하지 않음
+            # print(f" '스냅/코디' 탭을 찾거나 클릭하는 중 오류 발생: {e}") # 제거
+            # print(" '스냅/코디' 탭 클릭 없이 현재 페이지에서 코디 아이템을 찾습니다.") # 제거
+            pass 
 
 
         # HTML 소스 가져오기 및 BeautifulSoup 파싱
@@ -202,10 +202,10 @@ def scrape_musinsa_coordi(search_query, num_results=10):
         snap_items = soup.select('div.sc-d36st-1.gIhsno, .style-list-item, li.style-list-item')
 
         if not snap_items:
-            # print("[스크래퍼] 스냅/코디 아이템을 찾을 수 없습니다.") # 제거
+            # print("스냅/코디 아이템을 찾을 수 없습니다.") # 제거
             pass # 메시지 제거
         else:
-            # print(f"[스크래퍼] 총 {len(snap_items)}개의 스냅/코디 아이템을 찾았습니다.") # 제거
+            # print(f"총 {len(snap_items)}개의 스냅/코디 아이템을 찾았습니다.") # 제거
             # 요청된 개수만큼 처리 (랜덤 선택 포함)
             if num_results == 1:
                 items_to_process = [random.choice(snap_items)] if snap_items else []
@@ -244,13 +244,13 @@ def scrape_musinsa_coordi(search_query, num_results=10):
 
     except Exception as e:
         print(f"[오류] 코디 정보를 가져오는 중 문제가 발생했습니다. 다시 시도해주세요.")
-        # print(f"[스크래퍼] 스크래핑 중 전반적인 오류가 발생했습니다: {type(e).__name__}: {e}") # 제거
+        # print(f"스크래핑 중 전반적인 오류가 발생했습니다: {type(e).__name__}: {e}") # 제거
         return None
 
     finally:
         if driver:
             driver.quit()
-            # print("[스크래퍼] 브라우저가 닫혔습니다.") # 제거
+            # print("브라우저가 닫혔습니다.") # 제거
         return results
 
 # --- 무작위 코디 추천을 위한 스크래핑 함수 (이전과 동일) ---
@@ -270,28 +270,28 @@ def scrape_random_coordi_item():
 
     try:
         driver = webdriver.Chrome(service=service, options=options)
-        # print(f"[스크래퍼] 무신사 코디 페이지를 엽니다.") # 제거
+        # 
         
         driver.get('https://www.musinsa.com/app/styles/lists') 
-        # print(f"[스크래퍼] 무신사 스냅/코디 리스트 페이지로 이동했습니다.") # 제거
+        # 
         
         try:
             WebDriverWait(driver, 15).until(
                 EC.presence_of_element_located((By.CSS_SELECTOR, 'li.style-list-item img.style-list-thumbnail__img'))
             )
-            # print("[스크래퍼] 코디 아이템 이미지가 로드될 때까지 대기했습니다.") # 제거
+            # 
         except Exception as e:
-            # print(f"[스크래퍼] 코디 아이템 이미지 로딩 대기 중 오류 발생: {e}") # 제거
+            # 
             time.sleep(10)
 
         soup = BeautifulSoup(driver.page_source, 'html.parser')
         snap_items = soup.select('li.style-list-item') 
 
         if not snap_items:
-            # print("[스크래퍼] 랜덤 코디 아이템을 찾을 수 없습니다.") # 제거
+            # 
             return None
         
-        # print(f"[스크래퍼] 총 {len(snap_items)}개의 랜덤 코디 아이템을 찾았습니다.") # 제거
+        #
         selected_item = random.choice(snap_items)
 
         image_element = selected_item.select_one('img.style-list-thumbnail__img')
@@ -346,8 +346,8 @@ def print_results(results, title="코디 추천 결과"):
     for i, item in enumerate(results):
         print(f"  [{i+1}] IMAGE: {item['image_url']}")
         print(f"      LINK : {item['link']}")
-        print("  ───────────────────────────────────────────") # 각 항목 구분선
-    print(f"\n") # 결과 후 빈 줄 추가
+        print("  ───────────────────────────────────────────") 
+    print(f"\n") 
 
 # --- CLI 메뉴 실행 함수 ---
 def run_cli_app():

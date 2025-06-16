@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify # jsonify는 이제 결과 반환 시 사용 안 함
+from flask import Flask, render_template, request, jsonify 
 import time
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
@@ -14,8 +14,8 @@ import random
 
 app = Flask(__name__)
 
-# --- 1. ChromeDriver 경로 설정 (사용자님의 정확한 경로로 변경해주세요!) ---
-driver_path = '/Users/hyun/Desktop/muapk/chromedriver' # <--- 이 부분을 사용자님의 정확한 경로로 바꿔주세요!
+# --- 1. ChromeDriver
+driver_path = '/Users/hyun/Desktop/muapk/chromedriver' 
 
 # --- 2. OpenWeatherMap API 설정 ---
 OPENWEATHER_API_KEY = "6155529344f541a727b2742c6307ebd1"
@@ -96,7 +96,7 @@ def get_weather_info_and_keywords(city):
 
         temp_keyword, outfit_desc = get_weather_keyword_from_temp(temperature)
 
-        search_keyword_combined = temp_keyword # 단일 키워드
+        search_keyword_combined = temp_keyword 
 
         return {
             "search_keyword": search_keyword_combined,
@@ -129,7 +129,7 @@ def scrape_musinsa_coordi(search_query, num_results=10):
     options.add_argument('user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36')
     options.add_argument('--window-size=1920,1080')
     options.add_argument('--start-maximized')
-    options.add_argument('--headless') # Flask 앱은 백그라운드에서 실행되므로 headless 모드 사용
+    options.add_argument('--headless') 
 
     driver = None
     results = []
@@ -138,12 +138,11 @@ def scrape_musinsa_coordi(search_query, num_results=10):
         driver = webdriver.Chrome(service=service, options=options)
         print(f"[스크래퍼] 무신사 웹사이트를 엽니다.")
 
-        # 팝업 스킵 URL 적용
+     
         driver.get('https://www.musinsa.com/main/musinsa/recommend?skip_bf=Y&gf=A')
         print(f"[스크래퍼] 무신사 추천 페이지로 이동했습니다. (팝업 스킵 시도)")
         time.sleep(7)
 
-        # 1. 초기 검색창 (트리거)를 감싸는 버튼 찾기 및 클릭
         initial_search_trigger_button = WebDriverWait(driver, 25).until(
             EC.element_to_be_clickable((By.CSS_SELECTOR, 'button[data-button-id="search_window"]'))
         )
@@ -176,7 +175,7 @@ def scrape_musinsa_coordi(search_query, num_results=10):
 
         print(f"[스크래퍼] 검색을 실행했습니다.")
 
-        # 검색 결과 페이지로 URL이 변경될 때까지 기다립니다
+
         WebDriverWait(driver, 40).until(EC.url_contains('/search/goods'))
         print("[스크래퍼] 검색 결과 페이지로 성공적으로 이동했습니다.")
         time.sleep(7)
@@ -251,7 +250,7 @@ def scrape_musinsa_coordi(search_query, num_results=10):
             print("[스크래퍼] 브라우저가 닫혔습니다.")
         return results
 
-# --- 무작위 코디 추천을 위한 스크래핑 함수 (이전과 동일) ---
+# --- 무작위 코디 추천을 위한 스크래핑 함수 ---
 def scrape_random_coordi_item():
     service = Service(driver_path)
     options = Options()
@@ -335,10 +334,8 @@ def scrape_random_coordi_item():
 # --- Flask 라우트 정의 ---
 @app.route('/')
 def index():
-    # 초기 로드 시 `results`와 `error_message`를 빈 값으로 넘겨줍니다.
     return render_template('index.html', results=None, weather_info=None, error_message=None)
 
-# 모든 POST 라우트를 `render_template`를 사용하도록 수정합니다.
 @app.route('/weather_coordi', methods=['POST'])
 def weather_coordi():
     city = request.form.get('city')
