@@ -260,7 +260,7 @@ def scrape_random_coordi_item():
     options.add_argument('user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36')
     options.add_argument('--window-size=1920,1080')
     options.add_argument('--start-maximized')
-    options.add_argument('--headless') # Flask 앱은 백그라운드에서 실행되므로 headless 모드 사용
+    options.add_argument('--headless') 
 
     driver = None
     random_coordi = None
@@ -331,7 +331,7 @@ def scrape_random_coordi_item():
         return random_coordi
 
 
-# --- Flask 라우트 정의 ---
+# --- Flask 정의 ---
 @app.route('/')
 def index():
     return render_template('index.html', results=None, weather_info=None, error_message=None)
@@ -396,6 +396,6 @@ def keyword_random_coordi():
 def random_coordi():
     random_item = scrape_random_coordi_item()
     if random_item:
-        return render_template('index.html', results=[random_item]) # results는 리스트여야 하므로 [random_item]
+        return render_template('index.html', results=[random_item]) 
     else:
         return render_template('index.html', error_message="랜덤 코디를 가져오는 데 실패했습니다.")
